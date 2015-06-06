@@ -108,6 +108,7 @@ catkin_package(
 include_directories(
   include/
   ${catkin_INCLUDE_DIRS}
+  ${wiringPi_INCLUDE}
 )
 
 # Control loop
@@ -120,6 +121,7 @@ target_link_libraries(kulbu_hardware_control_loop
 add_library(kulbu_hardware_interface src/kulbu_hardware_interface.cpp)
 target_link_libraries(kulbu_hardware_interface
   ${catkin_LIBRARIES}
+  ${wiringPi_LIBRARY}
 )
 
 # Main control executable
