@@ -1,22 +1,17 @@
-# FindWiringpi.cmake - Try to find the wiringPi library
-FIND_PATH(WIRINGPI_INCLUDE_DIR NAMES wiringPi.h
-   PATHS
-   /usr
-   /usr/local
-   /opt
-   PATH_SUFFIXES
-   )
+# - Find wiringPi
+#
+#  wiringpi_INCLUDES  - List of wiringPi includes
+#  wiringpi_FOUND     - True if wiringPi found.
 
-FIND_LIBRARY(WIRINGPI_LIBRARIES NAMES wiringPi
-   PATHS
-   /usr
-   /usr/local
-   /opt
-   )
+# Look for the header file.
+find_path(wiringPi_INCLUDE NAMES wiringPi.h
+  PATHS $ENV{WIRINGPI_ROOT} /usr /usr/local /usr/share)
 
-#set(${WIRINGPI_LIBRARIES})
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(wiringPi DEFAULT_MSG wiringPi_INCLUDE)
 
-INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(wiringPi DEFAULT_MSG WIRINGPI_LIBRARIES WIRINGPI_INCLUDE_DIR)
-
-MARK_AS_ADVANCED(WIRINGPI_INCLUDE_DIR WIRINGPI_LIBRARIES)
+if(wiringPi_FOUND)
+  message(STATUS "Found wiringPi (include: ${wiringPi_INCLUDE})")
+  set(wiringPi_INCLUDES ${wiringPi_INCLUDE})
+  mark_as_advanced(wiringPi_INCLUDE)
+endif()

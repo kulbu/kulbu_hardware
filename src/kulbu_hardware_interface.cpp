@@ -5,8 +5,8 @@
 #include <kulbu_hardware/kulbu_hardware_interface.h>
 // #include <stdio>
 // #include <string>
-#include <wiringPi>
-#include <softTone>
+#include <wiringPi.h>
+#include <softTone.h>
 
 namespace kulbu_hardware {
 
