@@ -1,0 +1,19 @@
+<launch>
+  <arg name="ns" default="/kulbu"/>
+
+  <!-- GDB functionality -->
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
+
+  <group ns="$(arg ns)">
+
+    <rosparam file="$(find kulbu_hardware)/config/control_hardware.yaml" command="load" />
+
+    <!-- Load hardware interface -->
+    <node name="kulbu_hardware_interface" pkg="kulbu_hardware" type="kulbu_hardware_main"
+          output="screen" launch-prefix="$(arg launch_prefix)"/>
+
+  </group>
+
+</launch>

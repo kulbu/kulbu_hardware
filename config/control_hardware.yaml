@@ -1,0 +1,23 @@
+hardware_interface:
+  steps_per_m: 250
+  dirs:
+    - 0
+    - 4
+    - 12
+    - 6
+    - 21
+    - 26
+  steps:
+    - 2
+    - 5
+    - 13
+    - 10
+    - 22
+    - 27
+  joints:
+    - mid_left_wheel_joint
+    - mid_right_wheel_joint
+    - front_left_wheel_joint
+    - front_right_wheel_joint
+    - back_left_wheel_joint
+    - back_right_wheel_joint
