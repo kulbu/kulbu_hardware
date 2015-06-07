@@ -16,28 +16,29 @@ int pwm_status(unsigned int pwm, bool enable) {
   int fd;
   char buf[MAX_BUF];
 
-  // First check current status, only update if changed.
+  // First check current value, only update if changed.
   char curr[11];
   int status;
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
   fd = open(buf, sizeof(buf), O_RDONLY);
   if (fd < 0) {
-    perror("pwm/read");
+    perror("pwm/enable/read");
     return fd;
   }
   read(fd, curr, sizeof(curr));
   close(fd);
-  // printf("curr %s:", curr);
  
   // "On" always ends with "n". 
   status = (curr[strlen(curr)-2] == 'n');
-  // printf("s %d: c %c:", status, curr[strlen(curr)-2]);
 
   if (status != enable) {
+    ROS_INFO_STREAM_NAMED("kulbu_hardware_interface",
+       "Chan: " << pwm << " Enable: " << enable);
+
     snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
     fd = open(buf, O_WRONLY);
     if (fd < 0) {
-      perror("pwm/enable");
+      perror("pwm/enable/write");
       return fd;
     }
 
@@ -55,17 +56,33 @@ int pwm_freq(unsigned int pwm, unsigned int freq) {
   int fd;
   char buf[MAX_BUF];
 
+  // First check current value, only update if changed.
+  char curr[11];
+  int status;
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/freq%d", pwm);
-  fd = open(buf, O_WRONLY);
+  fd = open(buf, sizeof(buf), O_RDONLY);
   if (fd < 0) {
-    perror("pwm/freq");
+    perror("pwm/freq/read");
     return fd;
   }
-
-  int len = snprintf(buf, sizeof(buf), "%d", freq);
-  write(fd, buf, len);
+  read(fd, curr, sizeof(curr));
   close(fd);
 
+  if (atoi(curr) != freq && freq >= 1) {
+    ROS_INFO_STREAM_NAMED("kulbu_hardware_interface",
+       "Chan: " << pwm << " Freq: " << freq);
+
+    snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/freq%d", pwm);
+    fd = open(buf, O_WRONLY);
+    if (fd < 0) {
+      perror("pwm/freq/write");
+      return fd;
+    }
+
+    int len = snprintf(buf, sizeof(buf), "%d", freq);
+    write(fd, buf, len);
+    close(fd);
+  }
   return 0;
 }
 
@@ -250,6 +267,7 @@ void KulbuHardwareInterface::write(ros::Duration elapsed_time) {
 
         // Disable PWM when stopped.
         if (freq < 1) {
+          freq = 0;
           pwm_status(pin_steps_[i], 0);
         // FIXME: Only if previously deactivated.
         } else {
