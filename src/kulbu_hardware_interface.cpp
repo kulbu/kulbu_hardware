@@ -17,7 +17,6 @@ int pwm_status(unsigned int pwm, bool enable) {
   char buf[MAX_BUF];
 
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
-
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
     perror("pwm/enable");
@@ -38,26 +37,24 @@ int pwm_freq(unsigned int pwm, unsigned int freq) {
   char buf[MAX_BUF];
 
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/freq%d", pwm);
-
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
     perror("pwm/freq");
     return fd;
   }
 
-  len = snprintf(buf, sizeof(buf), "%d", freq);
+  int len = snprintf(buf, sizeof(buf), "%d", freq);
   write(fd, buf, len);
   close(fd);
 
   return 0;
 }
 
-int gpio_set(unsigned int pin, unsigned int value) {
+int gpio_set(unsigned int gpio, unsigned int value) {
   int fd;
   char buf[MAX_BUF];
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
-
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
     perror("gpio/set-value");
