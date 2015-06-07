@@ -3,11 +3,13 @@
  */
 
 #include <kulbu_hardware/kulbu_hardware_interface.h>
+#include <fcntl.h>
 // #include <wiringPi.h>
 // #include <softTone.h>
 
 #define SYSFS_GPIO_DIR  "/sys/class/gpio"
 #define SYSFS_PWM_DIR   "/sys/devices/platform/pwm-ctrl"
+#define MAX_BUF 256
 
 // Temp place-holder for some sysfs code.
 int pwm_status(unsigned int pwm, bool enable) {
