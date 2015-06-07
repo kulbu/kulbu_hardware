@@ -3,8 +3,6 @@
  */
 
 #include <kulbu_hardware/kulbu_hardware_interface.h>
-// #include <stdio>
-// #include <string>
 #include <wiringPi.h>
 #include <softTone.h>
 
@@ -69,7 +67,7 @@ void KulbuHardwareInterface::init() {
   joint_effort_command_.resize(num_joints_);
 
   // Initialise GPIO
-  wiringPiSetup();
+  wiringPiSetupSys();
 
   // Initialize controller
   for (std::size_t i = 0; i < num_joints_; ++i) {
@@ -77,8 +75,8 @@ void KulbuHardwareInterface::init() {
       "Loading joint name: " << joint_names_[i]);
 
     // Set direction pins to forward by default.
-    pinMode(pin_dirs_[i], OUTPUT);
-    digitalWrite(pin_dirs_[i], LOW);
+    // pinMode(pin_dirs_[i], OUTPUT);
+    // digitalWrite(pin_dirs_[i], LOW);
 
     // Create PWM tone generator for joint
     // pinMode(pin_steps_[i], SOFT_TONE_OUTPUT);
@@ -144,6 +142,9 @@ void KulbuHardwareInterface::write(ros::Duration elapsed_time) {
 
   // Send commands in different modes
   for (std::size_t i = 0; i < num_joints_; ++i) {
+    // Skip joints with no pins defined
+    if (pin_dirs_[i] == -1 || pin_steps_[i] == -1) continue;
+
     switch (joint_mode_) {
       case 1:  // hardware_interface::MODE_VELOCITY:
         // Calc PWM frequency.
@@ -158,7 +159,7 @@ void KulbuHardwareInterface::write(ros::Duration elapsed_time) {
         }
 
         // Set direction pin
-        digitalWrite(pin_dirs_[i], dir);
+        // digitalWrite(pin_dirs_[i], dir);
 
         // Set PWM frequency
         softToneWrite(pin_steps_[i], freq);
