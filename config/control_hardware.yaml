@@ -1,19 +1,19 @@
 hardware_interface:
   steps_per_m: 250
   dirs:
-    - 88
-    - -1
-    - -1 
-    - -1 
-    - -1 
-    - -1 
-  steps:
+    - 88 # Exported GPIO pin
     - 87
-    - -1 
-    - -1 
-    - -1 
-    - -1 
-    - -1 
+    - -1
+    - -1
+    - -1
+    - -1
+  steps:
+    - 0 # PWM Index in sysfs.
+    - 1
+    - -1
+    - -1
+    - -1
+    - -1
   joints:
     - mid_left_wheel_joint
     - mid_right_wheel_joint
