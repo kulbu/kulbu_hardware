@@ -16,19 +16,38 @@ int pwm_status(unsigned int pwm, bool enable) {
   int fd;
   char buf[MAX_BUF];
 
+  // First check current status, only update if changed.
+  char curr[11];
+  int status;
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
-  fd = open(buf, O_WRONLY);
+  fd = open(buf, sizeof(buf), O_RDONLY);
   if (fd < 0) {
-    perror("pwm/enable");
+    perror("pwm/read");
     return fd;
   }
-
-  if (enable)
-    write(fd, "1", 2);
-  else
-    write(fd, "0", 2);
-
+  read(fd, curr, sizeof(curr));
   close(fd);
+  // printf("curr %s:", curr);
+ 
+  // "On" always ends with "n". 
+  status = (curr[strlen(curr)-2] == 'n');
+  // printf("s %d: c %c:", status, curr[strlen(curr)-2]);
+
+  if (status != enable) {
+    snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
+    fd = open(buf, O_WRONLY);
+    if (fd < 0) {
+      perror("pwm/enable");
+      return fd;
+    }
+
+    if (enable)
+      write(fd, "1", 2);
+    else
+      write(fd, "0", 2);
+
+    close(fd);
+  }
   return 0;
 }
 
