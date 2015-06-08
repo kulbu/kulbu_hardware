@@ -110,6 +110,51 @@ int pwm_duty(unsigned int pwm, unsigned int duty) {
   return 0;
 }
 
+int gpio_export(unsigned int gpio) {
+  int fd;
+  char buf[MAX_BUF];
+
+  ROS_DEBUG_STREAM_NAMED("kulbu_hardware_interface",
+     "Export: " << gpio);
+
+  fd = open(SYSFS_GPIO_DIR "/export", O_WRONLY);
+  if (fd < 0) {
+    ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
+      "gpio/export");
+    return fd;
+  }
+
+  int len = snprintf(buf, sizeof(buf), "%d", gpio);
+  write(fd, buf, len);
+  close(fd);
+
+  return 0;
+}
+
+int gpio_dir(unsigned int gpio, bool output) {
+  int fd;
+  char buf[MAX_BUF];
+
+  ROS_DEBUG_STREAM_NAMED("kulbu_hardware_interface",
+     "Dir: " << gpio << " Output: " << output);
+
+  snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/direction", gpio);
+  fd = open(buf, O_WRONLY);
+  if (fd < 0) {
+    ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
+      "gpio/direction");
+    return fd;
+  }
+
+  if (output)
+    write(fd, "out", 2);
+  else
+    write(fd, "in", 2);
+
+  close(fd);
+  return 0;
+}
+
 int gpio_set(unsigned int gpio, unsigned int value) {
   int fd;
   char buf[MAX_BUF];
@@ -203,6 +248,9 @@ void KulbuHardwareInterface::init() {
     pwm_enable(pin_steps_[i], 0);
     pwm_duty(pin_steps_[i], 512);
 
+    // Export GPIO pin for output.
+    gpio_export(pin_dirs_[i]);
+    gpio_dir(pin_dirs_[i], 1);
     // Set direction pins to forward by default.
     gpio_set(pin_dirs_[i], 0);
 
