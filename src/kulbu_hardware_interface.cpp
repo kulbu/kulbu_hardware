@@ -20,7 +20,6 @@ int pwm_enable(unsigned int pwm, bool enable) {
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
   fd = open(buf, sizeof(buf), O_RDONLY);
   if (fd < 0) {
-    // perror("pwm/enable/read");
     ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
       "pwm/enable/read");
     return fd;
@@ -38,7 +37,6 @@ int pwm_enable(unsigned int pwm, bool enable) {
     snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
     fd = open(buf, O_WRONLY);
     if (fd < 0) {
-      // perror("pwm/enable/write");
       ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
         "pwm/enable/write");
       return fd;
@@ -64,7 +62,6 @@ int pwm_freq(unsigned int pwm, unsigned int freq) {
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/freq%d", pwm);
   fd = open(buf, sizeof(buf), O_RDONLY);
   if (fd < 0) {
-    // perror("pwm/freq/read");
     ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
       "pwm/freq/read");
     return fd;
@@ -79,7 +76,6 @@ int pwm_freq(unsigned int pwm, unsigned int freq) {
     snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/freq%d", pwm);
     fd = open(buf, O_WRONLY);
     if (fd < 0) {
-      // perror("pwm/freq/write");
       ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
         "pwm/freq/write");
       return fd;
@@ -102,7 +98,6 @@ int pwm_duty(unsigned int pwm, unsigned int duty) {
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/duty%d", pwm);
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
-    // perror("pwm/duty/write");
     ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
       "pwm/duty/write");
     return fd;
@@ -125,7 +120,6 @@ int gpio_set(unsigned int gpio, unsigned int value) {
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
-    // perror("gpio/set-value");
     ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
       "gpio/set-value");
     return fd;
