@@ -193,12 +193,12 @@ void KulbuHardwareInterface::init() {
   }
 
   // Resize vectors
-  // joint_position_.resize(num_joints_);
+  joint_position_.resize(num_joints_);
   joint_velocity_.resize(num_joints_);
-  // joint_effort_.resize(num_joints_);
-  // joint_position_command_.resize(num_joints_);
+  joint_effort_.resize(num_joints_);
+  joint_position_command_.resize(num_joints_);
   joint_velocity_command_.resize(num_joints_);
-  // joint_effort_command_.resize(num_joints_);
+  joint_effort_command_.resize(num_joints_);
 
   // Initialize controller
   for (std::size_t i = 0; i < num_joints_; ++i) {
@@ -215,12 +215,11 @@ void KulbuHardwareInterface::init() {
     // Create joint state interface
     joint_state_interface_.registerHandle(hardware_interface::JointStateHandle(
       joint_names_[i],
-      &joint_velocity_[i]);
-    // &joint_position_[i],
-    // &joint_effort_[i])
+      &joint_position_[i],
+      &joint_velocity_[i],
+      &joint_effort_[i]));
 
     switch (joint_mode_) {
-      /*
       case 0:
         // Create position joint interface
         position_joint_interface_
@@ -229,7 +228,6 @@ void KulbuHardwareInterface::init() {
               joint_names_[i]),
               &joint_position_command_[i]));
         break;
-      */
       case 1:
         // Create velocity joint interface
         velocity_joint_interface_
@@ -238,7 +236,6 @@ void KulbuHardwareInterface::init() {
               joint_names_[i]),
               &joint_velocity_command_[i]));
         break;
-      /*
       case 2:
         // Create effort joint interface
         effort_joint_interface_
@@ -247,14 +244,13 @@ void KulbuHardwareInterface::init() {
               joint_names_[i]),
               &joint_effort_command_[i]));
         break;
-      */
     }
   }
 
   registerInterface(&joint_state_interface_);  // From RobotHW base class.
-  // registerInterface(&position_joint_interface_);  // From RobotHW base class.
+  registerInterface(&position_joint_interface_);  // From RobotHW base class.
   registerInterface(&velocity_joint_interface_);  // From RobotHW base class.
-  // registerInterface(&effort_joint_interface_);  // From RobotHW base class.
+  registerInterface(&effort_joint_interface_);  // From RobotHW base class.
 }
 
 void KulbuHardwareInterface::read(ros::Duration elapsed_time) {
