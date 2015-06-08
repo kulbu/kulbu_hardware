@@ -7,7 +7,7 @@
 
     <!-- Load hardware interface -->
     <node name="kulbu_hardware_interface" pkg="kulbu_hardware" type="kulbu_hardware_main"
-          output="screen" launch-prefix="$(arg launch_prefix)"/>
+          output="screen" />
 
   </group>
 
