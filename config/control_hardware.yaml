@@ -1,5 +1,5 @@
 hardware_interface:
-  steps_per_m: 1500
+  steps_per_m: 300
   dirs:
     - 88 # Exported GPIO pin
     - 87
