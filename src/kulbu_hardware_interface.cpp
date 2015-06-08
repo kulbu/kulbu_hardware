@@ -4,15 +4,13 @@
 
 #include <kulbu_hardware/kulbu_hardware_interface.h>
 #include <fcntl.h>
-// #include <wiringPi.h>
-// #include <softTone.h>
 
 #define SYSFS_GPIO_DIR  "/sys/class/gpio"
 #define SYSFS_PWM_DIR   "/sys/devices/platform/pwm-ctrl"
 #define MAX_BUF 256
 
-// Temp place-holder for some sysfs code.
-int pwm_status(unsigned int pwm, bool enable) {
+// FIXME: Encapsulate this IO code.
+int pwm_enable(unsigned int pwm, bool enable) {
   int fd;
   char buf[MAX_BUF];
 
@@ -27,12 +25,12 @@ int pwm_status(unsigned int pwm, bool enable) {
   }
   read(fd, curr, sizeof(curr));
   close(fd);
- 
-  // "On" always ends with "n". 
+
+  // "On" always ends with an "n".
   status = (curr[strlen(curr)-2] == 'n');
 
   if (status != enable) {
-    ROS_INFO_STREAM_NAMED("kulbu_hardware_interface",
+    ROS_DEBUG_STREAM_NAMED("kulbu_hardware_interface",
        "Chan: " << pwm << " Enable: " << enable);
 
     snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
@@ -69,7 +67,7 @@ int pwm_freq(unsigned int pwm, unsigned int freq) {
   close(fd);
 
   if (atoi(curr) != freq && freq >= 1) {
-    ROS_INFO_STREAM_NAMED("kulbu_hardware_interface",
+    ROS_DEBUG_STREAM_NAMED("kulbu_hardware_interface",
        "Chan: " << pwm << " Freq: " << freq);
 
     snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/freq%d", pwm);
@@ -86,9 +84,33 @@ int pwm_freq(unsigned int pwm, unsigned int freq) {
   return 0;
 }
 
+int pwm_duty(unsigned int pwm, unsigned int duty) {
+  int fd;
+  char buf[MAX_BUF];
+
+  ROS_DEBUG_STREAM_NAMED("kulbu_hardware_interface",
+     "Chan: " << pwm << " Duty: " << duty);
+
+  snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/duty%d", pwm);
+  fd = open(buf, O_WRONLY);
+  if (fd < 0) {
+    perror("pwm/duty/write");
+    return fd;
+  }
+
+  int len = snprintf(buf, sizeof(buf), "%d", duty);
+  write(fd, buf, len);
+  close(fd);
+
+  return 0;
+}
+
 int gpio_set(unsigned int gpio, unsigned int value) {
   int fd;
   char buf[MAX_BUF];
+
+  ROS_DEBUG_STREAM_NAMED("kulbu_hardware_interface",
+     "GPIO: " << gpio << " Value: " << value);
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
   fd = open(buf, O_WRONLY);
@@ -166,27 +188,16 @@ void KulbuHardwareInterface::init() {
   joint_velocity_command_.resize(num_joints_);
   joint_effort_command_.resize(num_joints_);
 
-  // Initialise GPIO
-  // wiringPiSetupSys();
-  // FIXME: Ensure duty cycle is correct.
-  // `512 > /sys/devices/platform/pwm-ctrl/duty0`
-
   // Initialize controller
   for (std::size_t i = 0; i < num_joints_; ++i) {
     ROS_DEBUG_STREAM_NAMED("kulbu_hardware_interface",
       "Loading joint name: " << joint_names_[i]);
 
+    // Start with PWM turned off and 50/50 duty cycle.
+    pwm_enable(pin_steps_[i], 0);
+    pwm_duty(pin_steps_[i], 512);
+
     // Set direction pins to forward by default.
-    // pinMode(pin_dirs_[i], OUTPUT);
-    // digitalWrite(pin_dirs_[i], LOW);
-
-    // Create PWM tone generator for joint
-    // pinMode(pin_steps_[i], SOFT_TONE_OUTPUT);
-    // softToneCreate(pin_steps_[i]);
-
-    // Start with PWM turned off.
-    pwm_status(pin_steps_[i], 0);
-    // Start going forward.
     gpio_set(pin_dirs_[i], 0);
 
     // Create joint state interface
@@ -268,18 +279,15 @@ void KulbuHardwareInterface::write(ros::Duration elapsed_time) {
         // Disable PWM when stopped.
         if (freq < 1) {
           freq = 0;
-          pwm_status(pin_steps_[i], 0);
-        // FIXME: Only if previously deactivated.
+          pwm_enable(pin_steps_[i], 0);
         } else {
-          pwm_status(pin_steps_[i], 1);
+          pwm_enable(pin_steps_[i], 1);
         }
 
-        // Set direction pin
-        // digitalWrite(pin_dirs_[i], dir);
+        // Set direction pin.
         gpio_set(pin_dirs_[i], dir);
 
-        // Set PWM frequency
-        // softToneWrite(pin_steps_[i], freq);
+        // Set PWM frequency.
         pwm_freq(pin_steps_[i], freq);
 
         ROS_DEBUG_STREAM_NAMED("kulbu_hardware_interface",
