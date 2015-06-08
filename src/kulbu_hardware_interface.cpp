@@ -27,7 +27,7 @@ int pwm_enable(unsigned int pwm, bool enable) {
   read(fd, curr, sizeof(curr));
   close(fd);
 
-  // "On" always ends with an "n".
+  // "On" always ends with an "n". Quick and dirty.
   status = (curr[strlen(curr)-2] == 'n');
 
   if (status != enable) {
@@ -110,6 +110,7 @@ int pwm_duty(unsigned int pwm, unsigned int duty) {
   return 0;
 }
 
+/*
 int gpio_export(unsigned int gpio) {
   int fd;
   char buf[MAX_BUF];
@@ -154,6 +155,7 @@ int gpio_dir(unsigned int gpio, bool output) {
   close(fd);
   return 0;
 }
+*/
 
 int gpio_set(unsigned int gpio, unsigned int value) {
   int fd;
@@ -215,6 +217,7 @@ void KulbuHardwareInterface::init() {
   }
   num_joints_ = joint_names_.size();
 
+  // Get direction GPIO pins; 0 = forward, 1 = reverse.
   nh_.getParam("hardware_interface/dirs", pin_dirs_);
   if (pin_dirs_.size() == 0) {
     ROS_FATAL_STREAM_NAMED("kulbu_hardware_interface",
@@ -223,6 +226,7 @@ void KulbuHardwareInterface::init() {
     exit(-1);
   }
 
+  // Get PWM sysfs indexes.
   nh_.getParam("hardware_interface/steps", pin_steps_);
   if (pin_steps_.size() == 0) {
     ROS_FATAL_STREAM_NAMED("kulbu_hardware_interface",
@@ -249,8 +253,10 @@ void KulbuHardwareInterface::init() {
     pwm_duty(pin_steps_[i], 512);
 
     // Export GPIO pin for output.
-    gpio_export(pin_dirs_[i]);
-    gpio_dir(pin_dirs_[i], 1);
+    // FIXME: Permission denied? Manual export `gpio export 88 out`
+    // gpio_export(pin_dirs_[i]);
+    // gpio_dir(pin_dirs_[i], 1);
+
     // Set direction pins to forward by default.
     gpio_set(pin_dirs_[i], 0);
 
@@ -296,6 +302,8 @@ void KulbuHardwareInterface::init() {
 }
 
 void KulbuHardwareInterface::read(ros::Duration elapsed_time) {
+  // TODO: Optical encoders.
+
   // Read the joint states from your hardware here
   // e.g.
   // for (std::size_t i = 0; i < num_joints_; ++i)

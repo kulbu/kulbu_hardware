@@ -12,6 +12,8 @@ https://github.com/kulbu/kulbu/
 ```
 sudo modprobe pwm-meson npwm=2
 sudo modprobe pwm-ctrl
+gpio export 87 out
+gpio export 88 out
 ```
 
 ## Usage
