@@ -4,6 +4,8 @@ https://github.com/kulbu/kulbu/
 
 # Kulbu Hardware
 
+Based on Dave Coleman's [hardware interface boilerplate](https://github.com/davetcoleman/ros_control_boilerplate).
+
 * GPIO controls direction.
 * `VelocityJointInterface` connected to on-board PWM.
 
