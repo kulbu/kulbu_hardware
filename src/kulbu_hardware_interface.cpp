@@ -20,7 +20,9 @@ int pwm_enable(unsigned int pwm, bool enable) {
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
   fd = open(buf, sizeof(buf), O_RDONLY);
   if (fd < 0) {
-    perror("pwm/enable/read");
+    // perror("pwm/enable/read");
+    ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
+      "pwm/enable/read");
     return fd;
   }
   read(fd, curr, sizeof(curr));
@@ -36,7 +38,9 @@ int pwm_enable(unsigned int pwm, bool enable) {
     snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/enable%d", pwm);
     fd = open(buf, O_WRONLY);
     if (fd < 0) {
-      perror("pwm/enable/write");
+      // perror("pwm/enable/write");
+      ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
+        "pwm/enable/write");
       return fd;
     }
 
@@ -60,7 +64,9 @@ int pwm_freq(unsigned int pwm, unsigned int freq) {
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/freq%d", pwm);
   fd = open(buf, sizeof(buf), O_RDONLY);
   if (fd < 0) {
-    perror("pwm/freq/read");
+    // perror("pwm/freq/read");
+    ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
+      "pwm/freq/read");
     return fd;
   }
   read(fd, curr, sizeof(curr));
@@ -73,7 +79,9 @@ int pwm_freq(unsigned int pwm, unsigned int freq) {
     snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/freq%d", pwm);
     fd = open(buf, O_WRONLY);
     if (fd < 0) {
-      perror("pwm/freq/write");
+      // perror("pwm/freq/write");
+      ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
+        "pwm/freq/write");
       return fd;
     }
 
@@ -94,7 +102,9 @@ int pwm_duty(unsigned int pwm, unsigned int duty) {
   snprintf(buf, sizeof(buf), SYSFS_PWM_DIR  "/duty%d", pwm);
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
-    perror("pwm/duty/write");
+    // perror("pwm/duty/write");
+    ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
+      "pwm/duty/write");
     return fd;
   }
 
@@ -115,7 +125,9 @@ int gpio_set(unsigned int gpio, unsigned int value) {
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
-    perror("gpio/set-value");
+    // perror("gpio/set-value");
+    ROS_ERROR_STREAM_NAMED("kulbu_hardware_interface",
+      "gpio/set-value");
     return fd;
   }
 
@@ -181,12 +193,12 @@ void KulbuHardwareInterface::init() {
   }
 
   // Resize vectors
-  joint_position_.resize(num_joints_);
+  // joint_position_.resize(num_joints_);
   joint_velocity_.resize(num_joints_);
-  joint_effort_.resize(num_joints_);
-  joint_position_command_.resize(num_joints_);
+  // joint_effort_.resize(num_joints_);
+  // joint_position_command_.resize(num_joints_);
   joint_velocity_command_.resize(num_joints_);
-  joint_effort_command_.resize(num_joints_);
+  // joint_effort_command_.resize(num_joints_);
 
   // Initialize controller
   for (std::size_t i = 0; i < num_joints_; ++i) {
@@ -203,11 +215,12 @@ void KulbuHardwareInterface::init() {
     // Create joint state interface
     joint_state_interface_.registerHandle(hardware_interface::JointStateHandle(
       joint_names_[i],
-      &joint_position_[i],
-      &joint_velocity_[i],
-      &joint_effort_[i]));
+      &joint_velocity_[i]);
+    // &joint_position_[i],
+    // &joint_effort_[i])
 
     switch (joint_mode_) {
+      /*
       case 0:
         // Create position joint interface
         position_joint_interface_
@@ -216,7 +229,7 @@ void KulbuHardwareInterface::init() {
               joint_names_[i]),
               &joint_position_command_[i]));
         break;
-
+      */
       case 1:
         // Create velocity joint interface
         velocity_joint_interface_
@@ -225,7 +238,7 @@ void KulbuHardwareInterface::init() {
               joint_names_[i]),
               &joint_velocity_command_[i]));
         break;
-
+      /*
       case 2:
         // Create effort joint interface
         effort_joint_interface_
@@ -234,13 +247,14 @@ void KulbuHardwareInterface::init() {
               joint_names_[i]),
               &joint_effort_command_[i]));
         break;
+      */
     }
   }
 
   registerInterface(&joint_state_interface_);  // From RobotHW base class.
-  registerInterface(&position_joint_interface_);  // From RobotHW base class.
+  // registerInterface(&position_joint_interface_);  // From RobotHW base class.
   registerInterface(&velocity_joint_interface_);  // From RobotHW base class.
-  registerInterface(&effort_joint_interface_);  // From RobotHW base class.
+  // registerInterface(&effort_joint_interface_);  // From RobotHW base class.
 }
 
 void KulbuHardwareInterface::read(ros::Duration elapsed_time) {
