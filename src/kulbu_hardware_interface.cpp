@@ -111,6 +111,24 @@ int pwm_duty(unsigned int pwm, unsigned int duty) {
 }
 
 /*
+int gpio_own(char *file) {
+  uid_t uid = getuid();
+  uid_t gid = getgid();
+
+  if (chown (file, uid, gid) != 0) {
+    if (errno == ENOENT) {
+      ROS_WARN_STREAM_NAMED("kulbu_hardware_interface",
+        "gpio/own File does not exist");
+    } else {
+      ROS_FATAL_STREAM_NAMED("kulbu_hardware_interface",
+        "gpio/own Unable to change ownership "
+        << file << " Error: " << strerror (errno));
+      exit (1) ;
+    }
+  }
+
+}
+
 int gpio_export(unsigned int gpio) {
   int fd;
   char buf[MAX_BUF];
@@ -129,7 +147,13 @@ int gpio_export(unsigned int gpio) {
   write(fd, buf, len);
   close(fd);
 
-  return 0;
+  snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
+  gpio_own(buf);
+
+  snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/edge", gpio);
+  gpio_own(buf);
+
+ return 0;
 }
 
 int gpio_dir(unsigned int gpio, bool output) {
@@ -153,6 +177,10 @@ int gpio_dir(unsigned int gpio, bool output) {
     write(fd, "in", 2);
 
   close(fd);
+
+  snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/direction", gpio);
+  gpio_own(buf);
+
   return 0;
 }
 */
@@ -248,14 +276,14 @@ void KulbuHardwareInterface::init() {
     ROS_DEBUG_STREAM_NAMED("kulbu_hardware_interface",
       "Loading joint name: " << joint_names_[i]);
 
-    // Start with PWM turned off and 50/50 duty cycle.
-    pwm_enable(pin_steps_[i], 0);
-    pwm_duty(pin_steps_[i], 512);
-
     // Export GPIO pin for output.
     // FIXME: Permission denied? Manual export `gpio export 88 out`
     // gpio_export(pin_dirs_[i]);
     // gpio_dir(pin_dirs_[i], 1);
+
+    // Start with PWM turned off and 50/50 duty cycle.
+    pwm_enable(pin_steps_[i], 0);
+    pwm_duty(pin_steps_[i], 512);
 
     // Set direction pins to forward by default.
     gpio_set(pin_dirs_[i], 0);
