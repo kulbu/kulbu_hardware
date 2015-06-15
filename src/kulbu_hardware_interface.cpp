@@ -328,6 +328,9 @@ void KulbuHardwareInterface::write(ros::Duration elapsed_time) {
         // Calc PWM frequency.
         freq = joint_velocity_command_[i] * steps_per_m_;
 
+       // DEBUG: instantly adding velocity to state
+        joint_velocity_[i] = joint_velocity_command_[i];
+
         // Reverse flips direction.
         if (freq < 0) {
           freq = abs(freq);
