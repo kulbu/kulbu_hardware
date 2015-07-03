@@ -1,0 +1,88 @@
+# IMU type - 
+#   0 = Auto discover
+#   1 = Null (used when data is provided from a remote IMU
+#   2 = InvenSense MPU-9150
+#   3 = STM L3GD20H + LSM303D
+#   4 = STM L3GD20 + LSM303DLHC
+#   5 = STM LSM9DS0
+#   6 = STM LSM9DS1
+#   7 = InvenSense MPU-9250
+#   8 = STM L3GD20H + LSM303DLHC
+#   9 = Bosch BMX055
+#   10 = Bosch BNX055
+imu_type: 8
+imu_frame: imu_link
+i2c_bus: 1 
+i2c_slave_address: 107
+# Fusion type type - 
+#   0 - Null. Use if only sensor data required without fusion
+#   1 - Kalman STATE4
+#   2 - RTQF
+fusion_type: 2
+
+GD20HM303DLHC:
+# Gyro sample rate - 
+#   0 = 12.5Hz 
+#   1 = 25Hz 
+#   2 = 50Hz 
+#   3 = 100Hz 
+#   4 = 200Hz 
+#   5 = 400Hz 
+#   6 = 800Hz
+  gyro_sample_rate: 2
+# Gyro full scale range - 
+#   0 = 245 degrees per second 
+#   1 = 500 degrees per second 
+#   2 = 2000 degrees per second
+  gyro_full_scale_range: 1
+# Gyro high pass filter - 
+#   0 - 9 but see the L3GD20H manual for details
+  gyro_high_pass_filter: 4
+# Gyro bandwidth - 
+#   0 - 3 but see the L3GD20H manual for details
+  gyro_bandwidth: 1
+
+# Accel sample rate - 
+#   1 = 1Hz 
+#   2 = 10Hz 
+#   3 = 25Hz 
+#   4 = 50Hz 
+#   5 = 100Hz 
+#   6 = 200Hz 
+#   7 = 400Hz
+  accel_sample_rate: 4
+# Accel full scale range - 
+#   0 = +/- 2g 
+#   1 = +/- 4g 
+#   2 = +/- 8g 
+#   3 = +/- 16g
+  accel_full_scale_range: 2
+
+# Compass sample rate - 
+#   0 = 0.75Hz 
+#   1 = 1.5Hz 
+#   2 = 3Hz 
+#   3 = 7.5Hz 
+#   4 = 15Hz 
+#   5 = 30Hz 
+#   6 = 75Hz 
+#   7 = 220Hz
+  compass_sample_rate: 5
+# Compass full scale range - 
+#   1 = +/- 130 uT 
+#   2 = +/- 190 uT 
+#   3 = +/- 250 uT 
+#   4 = +/- 400 uT 
+#   5 = +/- 470 uT 
+#   6 = +/- 560 uT 
+#   7 = +/- 810 uT
+  compass_full_scale_range: 1
+
+# Calibration
+calib:
+  compass_min: [-126.213844, -92.825012, -91.776077]
+  compass_max: [78.116707, 123.573128, 84.820229]
+  
+  accel_min: [ -0.999472, -1.034522, -0.988818 ]
+  accel_max: [ 1.015403, 1.039254, 1.040816 ]
+

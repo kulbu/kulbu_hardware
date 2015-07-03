@@ -1,0 +1,27 @@
+<launch>
+  <arg name="ns" default="/kulbu"/>
+
+  <group ns="$(arg ns)">
+
+    <!-- Adafruit 10dof L3GD20H+LSM303DLHC -->
+    <node name="imu0" pkg="i2c_imu" type="i2c_imu_node"
+          output="screen">
+        <param name="frame_id" value="imu_link" />
+        <rosparam file="$(find kulbu_hardware)/config/imu0.yaml" />
+
+        <remap from="data" to="imu0/data" />
+    </node>
+
+    <!-- MPU-6150 -->
+    <node name="imu1" pkg="i2c_imu" type="i2c_imu_node"
+          output="screen">
+        <param name="frame_id" value="imu_link" />
+        <rosparam file="$(find kulbu_hardware)/config/imu1.yaml" />
+
+        <remap from="data" to="imu1/data" />
+    </node>
+
+
+  </group>
+
+</launch>
