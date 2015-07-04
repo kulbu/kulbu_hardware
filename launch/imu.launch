@@ -3,53 +3,25 @@
 
   <group ns="$(arg ns)">
 
-<!--
-XNORTH_YEAST              0
-XEAST_YSOUTH              1
-XSOUTH_YWEST              2
-XWEST_YNORTH              3
-XNORTH_YWEST              4
-XEAST_YNORTH              5
-XSOUTH_YEAST              6
-XWEST_YSOUTH              7
-XUP_YNORTH                8
-XUP_YEAST                 9
-XUP_YSOUTH                10
-XUP_YWEST                 11
-XDOWN_YNORTH              12
-XDOWN_YEAST               13
-XDOWN_YSOUTH              14
-XDOWN_YWEST               15
-XNORTH_YUP                16
-XEAST_YUP                 17
-XSOUTH_YUP                18
-XWEST_YUP                 19
-XNORTH_YDOWN              20
-XEAST_YDOWN               21
-XSOUTH_YDOWN              22
-XWEST_YDOWN               23
--->
-
     <!-- Adafruit 10dof L3GD20H+LSM303DLHC -->
-    <node name="imu0" pkg="i2c_imu" type="i2c_imu_node"
+    <node name="imu0" pkg="rtimulib_ros" type="rtimulib_ros"
           output="screen">
+        <param name="calibration_file_path" value="$(find kulbu_hardware)/config" />
+        <param name="calibration_file_name" value="imu0" />
         <param name="frame_id" value="imu_link" />
-        <param name="axis_rotation" value="0" />
-        <rosparam file="$(find kulbu_hardware)/config/imu0.yaml" />
-
-        <remap from="data" to="imu0/data" />
+        <param name="topic_name" value="imu0/data" />
+        <param name="update_rate" value="10" />
     </node>
 
     <!-- MPU-6150 -->
-    <node name="imu1" pkg="i2c_imu" type="i2c_imu_node"
+    <node name="imu1" pkg="rtimulib_ros" type="rtimulib_ros"
           output="screen">
+        <param name="calibration_file_path" value="$(find kulbu_hardware)/config" />
+        <param name="calibration_file_name" value="imu1" />
         <param name="frame_id" value="imu_link" />
-        <param name="axis_rotation" value="3" />
-        <rosparam file="$(find kulbu_hardware)/config/imu1.yaml" />
-
-        <remap from="data" to="imu1/data" />
+        <param name="topic_name" value="imu1/data" />
+        <param name="update_rate" value="10" />
     </node>
-
 
   </group>
 
