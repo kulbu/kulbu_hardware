@@ -1,0 +1,12 @@
+<launch>
+  <arg name="ns" default="/kulbu"/>
+
+  <group ns="$(arg ns)">
+    <node name="range_array_0" pkg="kulbu_hardware" type="kulbu_hardware_range"
+      output="screen">
+      <rosparam file="$(find kulbu_hardware)/config/range.yaml" />
+
+      <!--remap from="data" to="imu0/data" /-->
+    </node>
+  </group>
+</launch>
