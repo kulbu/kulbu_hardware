@@ -24,12 +24,34 @@ int main( int argc, char** argv) {
   //ros::spin();
   ros::Rate r(20.0);
   while (n.ok()) {
-    //ROS_DEBUG_STREAM("kulbu_hardware_range: ");
+    // Open the i2c bus.
+    int fh;
+    char filename[20];
+    snprintf(filename, 19, "/dev/i2c-%d", i2c_bus);
+    fh = open(filename, O_RDWR);
+    if (fh < 0) {
+      ROS_ERROR_STREAM("kulbu_hardware_range: Failed opening i2c_bus=" << i2c_bus);
+      exit(1);
+    }
 
-    // TODO: Open the `i2c_slave_address`.
+    // Lookup device by `i2c_slave_address`.
+    if (ioctl(fh, I2C_SLAVE, i2c_slave_address) < 0) {
+      ROS_ERROR_STREAM("kulbu_hardware_range: Failed opening i2c_slave_address=" << i2c_slave_address);
+      exit(1);
+    }
+
     for(unsigned i=0; i < i2c_registers.size(); i++) {
-      // TODO: Lookup result in `i2c_registers[i]`.
-      //ROS_DEBUG_STREAM("kulbu_hardware_range: reg=" << i << " res=" << res);
+      // Lookup result in `i2c_registers[i]`.
+      int32_t res;
+      char buf[10];
+
+      res = i2c_smbus_read_word_data(fh, i2c_registers[i]);
+      if (res < 0) {
+        ROS_ERROR_STREAM("kulbu_hardware_range: Failed i2c transaction i2c_register=" << i2c_registers[i]);
+        // continue
+      } else {
+        ROS_DEBUG_STREAM("kulbu_hardware_range: reg=" << i2c_registers[i] << " res=" << res);
+      }
     }
 
     //ros::spin();
