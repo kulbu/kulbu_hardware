@@ -5,7 +5,7 @@ int i2c_bus;
 int i2c_slave_address;
 std::vector<int> i2c_registers;
 
-int main( int argc, char** argv) {
+int main(int argc, char** argv) {
   // Ros pub/sub.
   if (!ros::isInitialized()) {
     ros::init(argc, argv, "kulbu_hardware_range");
@@ -22,6 +22,7 @@ int main( int argc, char** argv) {
 
   // Main loop
   //ros::spin();
+  // TODO: configurable rate.
   ros::Rate r(20.0);
   while (n.ok()) {
     // Open the i2c bus.
