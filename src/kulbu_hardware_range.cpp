@@ -20,7 +20,17 @@ int main(int argc, char** argv) {
   pn.param("i2c_slave_address", i2c_slave_address, 21); // 0x15
   pn.param("i2c_registers", i2c_registers); // FIXME: default?
 
-  ROS_INFO_STREAM("kulbu_hardware_range: Parameters i2c_bus=" << i2c_bus << " i2c_slave_address=" << i2c_slave_address);
+  ROS_INFO_STREAM("kulbu_hardware_range: Parameters i2c_bus=" << i2c_bus << " i2c_slave_address=" << i2c_slave_address << " i2c_registers=" << i2c_registers.size());
+
+  if (!(i2c_slave_address > 0)) {
+    ROS_ERROR_STREAM("kulbu_hardware_range: No address specified.");
+    exit(1);
+  }
+
+  if (i2c_registers.size() == 0) {
+    ROS_ERROR_STREAM("kulbu_hardware_range: No registers specified.");
+    exit(1);
+  }
 
   // Main loop
   //ros::spin();
@@ -36,6 +46,7 @@ int main(int argc, char** argv) {
       ROS_ERROR_STREAM("kulbu_hardware_range: Failed opening i2c_bus=" << filename);
       exit(1);
     }
+    //ROS_INFO_STREAM("kulbu_hardware_range: Bus opened i2c_bus=" << filename);
 
     // Lookup device by `i2c_slave_address`.
     if (ioctl(fh, I2C_SLAVE, i2c_slave_address) < 0) {
@@ -44,6 +55,7 @@ int main(int argc, char** argv) {
     }
 
     for(unsigned i=0; i < i2c_registers.size(); i++) {
+      ROS_INFO_STREAM("kulbu_hardware_range: reg=" << i2c_registers[i]);
       // Lookup result in `i2c_registers[i]`.
       int32_t res;
       char buf[10];
@@ -53,7 +65,7 @@ int main(int argc, char** argv) {
         ROS_ERROR_STREAM("kulbu_hardware_range: Failed i2c transaction i2c_register=" << i2c_registers[i]);
         // continue
       } else {
-        ROS_DEBUG_STREAM("kulbu_hardware_range: reg=" << i2c_registers[i] << " res=" << res);
+        ROS_INFO_STREAM("kulbu_hardware_range: reg=" << i2c_registers[i] << " res=" << res);
       }
     }
 
