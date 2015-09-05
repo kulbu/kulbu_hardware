@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
     }
 
     for(unsigned i=0; i < i2c_registers.size(); i++) {
-      ROS_INFO_STREAM("kulbu_hardware_range: reg=" << i2c_registers[i]);
+      //ROS_INFO_STREAM("kulbu_hardware_range: reg=" << i2c_registers[i]);
       // Lookup result in `i2c_registers[i]`.
       int32_t res;
       char buf[10];
