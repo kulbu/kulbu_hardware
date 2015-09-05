@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     snprintf(filename, 19, "/dev/i2c-%d", i2c_bus);
     fh = open(filename, O_RDWR);
     if (fh < 0) {
-      ROS_ERROR_STREAM("kulbu_hardware_range: Failed opening i2c_bus=" << i2c_bus);
+      ROS_ERROR_STREAM("kulbu_hardware_range: Failed opening i2c_bus=" << filename);
       exit(1);
     }
 
