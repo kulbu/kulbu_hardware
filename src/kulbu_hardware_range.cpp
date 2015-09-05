@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
 
   pn.param("i2c_bus", i2c_bus, 1);
   pn.param("i2c_slave_address", i2c_slave_address, 21); // 0x15
-  pn.param("i2c_registers", i2c_registers); // FIXME: default?
+  pn.getParam("i2c_registers", i2c_registers); // FIXME: default?
 
   ROS_INFO_STREAM("kulbu_hardware_range: Parameters i2c_bus=" << i2c_bus << " i2c_slave_address=" << i2c_slave_address << " i2c_registers=" << i2c_registers.size());
 
