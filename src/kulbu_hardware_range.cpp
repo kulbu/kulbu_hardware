@@ -1,4 +1,6 @@
 #include <ros/ros.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
 #include <linux/i2c-dev.h>
 
 int i2c_bus;

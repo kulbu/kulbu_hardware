@@ -132,6 +132,11 @@ target_link_libraries(kulbu_hardware_main
   ${catkin_LIBRARIES}
 )
 
+add_executable(kulbu_hardware_range src/kulbu_hardware_range.cpp)
+target_link_libraries(kulbu_hardware_range
+  ${catkin_LIBRARIES}
+)
+
 ## Declare a cpp library
 # add_library(kulbu_hardware
 #   src/${PROJECT_NAME}/kulbu_hardware.cpp
