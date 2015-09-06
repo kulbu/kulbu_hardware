@@ -3,9 +3,9 @@
 #include <fcntl.h>
 #include <linux/i2c-dev.h>
 
-uint8_t i2c_bus;
-uint8_t i2c_slave_address;
-std::vector<uint8_t> i2c_registers;
+int i2c_bus;
+int i2c_slave_address;
+std::vector<int> i2c_registers;
 
 int main(int argc, char** argv) {
   // Ros pub/sub.
