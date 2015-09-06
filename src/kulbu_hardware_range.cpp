@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
       //ROS_INFO_STREAM("kulbu_hardware_range: reg=" << i2c_registers[i]);
       // Lookup result in `i2c_registers[i]`.
       int res;
-      res = i2c_smbus_read_word_data(fh, i2c_registers[i]);
+      res = i2c_smbus_read_word_data(fh, (uint8_t)i2c_registers[i]);
       if (res < 0) {
         ROS_ERROR_STREAM("kulbu_hardware_range: Failed i2c transaction i2c_register=" << i2c_registers[i]);
         // continue
