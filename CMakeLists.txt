@@ -108,7 +108,25 @@ catkin_package(
 include_directories(
   include/
   ${catkin_INCLUDE_DIRS}
-  ${wiringPi_INCLUDE}
+  #${wiringPi_INCLUDE}
+)
+
+# Sysfs
+add_library(kulbu_hardware_sysfs src/kulbu_hardware_sysfs.cpp)
+target_link_libraries(kulbu_hardware_sysfs
+  ${catkin_LIBRARIES}
+)
+
+# Wheel Encoders
+add_library(kulbu_hardware_encoder src/kulbu_hardware_encoder.cpp)
+target_link_libraries(kulbu_hardware_encoder
+  ${catkin_LIBRARIES}
+)
+
+# Motor drivers
+add_library(kulbu_hardware_motor src/kulbu_hardware_motor.cpp)
+target_link_libraries(kulbu_hardware_motor
+  ${catkin_LIBRARIES}
 )
 
 # Control loop
@@ -121,7 +139,7 @@ target_link_libraries(kulbu_hardware_control_loop
 add_library(kulbu_hardware_interface src/kulbu_hardware_interface.cpp)
 target_link_libraries(kulbu_hardware_interface
   ${catkin_LIBRARIES}
-  ${wiringPi_LIBRARY}
+  #${wiringPi_LIBRARY}
 )
 
 # Main control executable
@@ -132,6 +150,7 @@ target_link_libraries(kulbu_hardware_main
   ${catkin_LIBRARIES}
 )
 
+# Experimental ultrasonic range sensor executable
 add_executable(kulbu_hardware_range src/kulbu_hardware_range.cpp)
 target_link_libraries(kulbu_hardware_range
   ${catkin_LIBRARIES}
