@@ -7,7 +7,8 @@ namespace kulbu_hardware {
       KulbuHardwareMotor();
 
       void init();
-      void move(int dir, int freq);
+      void setJointVelocity(int index, unsigned int freq);
+      void getJointVelocity(int index);
 
   }
 }  // namespace kulbu_hardware

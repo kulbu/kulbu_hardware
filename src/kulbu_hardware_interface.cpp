@@ -343,7 +343,7 @@ void KulbuHardwareInterface::read(ros::Duration elapsed_time) {
 }
 
 void KulbuHardwareInterface::write(ros::Duration elapsed_time) {
-  int freq = 0;
+  unsigned int freq = 0;
   int dir = 0;
 
   // Send commands in different modes

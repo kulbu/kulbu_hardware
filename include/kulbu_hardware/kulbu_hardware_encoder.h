@@ -7,6 +7,6 @@ namespace kulbu_hardware {
       KulbuHardwareEncoder();
 
       void init();
-      void read();
+      void getJointVelocity(int index);
   }
 }  // namespace kulbu_hardware
