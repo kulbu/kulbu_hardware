@@ -1,10 +1,10 @@
 namespace kulbu_hardware {
-  class KulbuHardwareMotor {
+  class KulbuHardwareRobot {
     public:
       /**
        * \brief Constructor
        */
-      KulbuHardwareMotor();
+      KulbuHardwareRobot();
 
       void init();
       void setJointVelocity(int index, unsigned int freq);

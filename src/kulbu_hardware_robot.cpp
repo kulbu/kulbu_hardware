@@ -1,6 +1,6 @@
 namespace kulbu_hardware {
 
-KulbuHardwareMotor::KulbuHardwareMotor() {
+KulbuHardwareRobot::KulbuHardwareRobot() {
 }
 
 }  // namespace kulbu_hardware
