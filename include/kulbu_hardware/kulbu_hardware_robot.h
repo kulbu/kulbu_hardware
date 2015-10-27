@@ -1,3 +1,5 @@
+#include <kulbu_hardware/kulbu_hardware_sysfs.h>
+
 namespace kulbu_hardware {
   class KulbuHardwareRobot {
     public:
@@ -6,9 +8,12 @@ namespace kulbu_hardware {
        */
       KulbuHardwareRobot();
 
-      void init();
+      std::vector<int>    pin_dirs;
+      std::vector<int>    pin_steps;
+
+      void initJointVelocity(int index);
       void setJointVelocity(int index, unsigned int freq);
-      void getJointVelocity(int index);
+      unsigned int getJointVelocity(int index);
 
   }
 }  // namespace kulbu_hardware

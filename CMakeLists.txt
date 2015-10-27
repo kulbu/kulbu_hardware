@@ -117,15 +117,9 @@ target_link_libraries(kulbu_hardware_sysfs
   ${catkin_LIBRARIES}
 )
 
-# Wheel Encoders
-add_library(kulbu_hardware_encoder src/kulbu_hardware_encoder.cpp)
-target_link_libraries(kulbu_hardware_encoder
-  ${catkin_LIBRARIES}
-)
-
-# Motor drivers
-add_library(kulbu_hardware_motor src/kulbu_hardware_motor.cpp)
-target_link_libraries(kulbu_hardware_motor
+# Robot
+add_library(kulbu_hardware_encoder src/kulbu_hardware_robot.cpp)
+target_link_libraries(kulbu_hardware_robot
   ${catkin_LIBRARIES}
 )
 

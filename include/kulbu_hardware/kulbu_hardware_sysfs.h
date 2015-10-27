@@ -1,4 +1,11 @@
+#include <fcntl.h>
+
+#define SYSFS_GPIO_DIR  "/sys/class/gpio"
+#define SYSFS_PWM_DIR   "/sys/devices/platform/pwm-ctrl"
+#define MAX_BUF 256
+
 namespace kulbu_hardware {
+
   class KulbuHardwareSysfs {
     public:
       /**
