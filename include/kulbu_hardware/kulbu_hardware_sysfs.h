@@ -1,3 +1,6 @@
+#ifndef KULBU_ROS_CONTROL__KULBU_HARDWARE_SYSFS_H
+#define KULBU_ROS_CONTROL__KULBU_HARDWARE_SYSFS_H
+
 #include <fcntl.h>
 
 #define SYSFS_GPIO_DIR  "/sys/class/gpio"
@@ -19,3 +22,5 @@ namespace kulbu_hardware {
       int gpio_set(unsigned int gpio, unsigned int value);
   }
 }  // namespace kulbu_hardware
+
+#endif  // KULBU_ROS_CONTROL__KULBU_HARDWARE_SYSFS_H

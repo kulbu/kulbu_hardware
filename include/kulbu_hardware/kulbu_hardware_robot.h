@@ -1,3 +1,6 @@
+#ifndef KULBU_ROS_CONTROL__KULBU_HARDWARE_ROBOT_H
+#define KULBU_ROS_CONTROL__KULBU_HARDWARE_ROBOT_H
+
 #include <kulbu_hardware/kulbu_hardware_sysfs.h>
 
 namespace kulbu_hardware {
@@ -17,3 +20,5 @@ namespace kulbu_hardware {
 
   }
 }  // namespace kulbu_hardware
+
+#endif  // KULBU_ROS_CONTROL__KULBU_HARDWARE_ROBOT_H
