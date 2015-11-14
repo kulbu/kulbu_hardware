@@ -2,6 +2,7 @@
 #define KULBU_ROS_CONTROL__KULBU_HARDWARE_ROBOT_H
 
 #include <kulbu_hardware/kulbu_hardware_sysfs.h>
+#include <vector>
 
 namespace kulbu_hardware {
   class KulbuHardwareRobot {

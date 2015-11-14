@@ -2,8 +2,8 @@
 
 namespace kulbu_hardware {
 
-KulbuHardwareSysfs::KulbuHardwareSysfs() {
-}
+  KulbuHardwareSysfs::KulbuHardwareSysfs() {
+  }
 
   int KulbuHardwareSysfs::pwm_enable(unsigned int pwm, bool enable) {
     int fd;

@@ -1,6 +1,7 @@
 #ifndef KULBU_ROS_CONTROL__KULBU_HARDWARE_SYSFS_H
 #define KULBU_ROS_CONTROL__KULBU_HARDWARE_SYSFS_H
 
+//#include <ros/ros.h>
 #include <fcntl.h>
 
 #define SYSFS_GPIO_DIR  "/sys/class/gpio"

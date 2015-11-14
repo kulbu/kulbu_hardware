@@ -88,6 +88,8 @@ catkin_package(
   INCLUDE_DIRS
 		include
   LIBRARIES
+		kulbu_hardware_sysfs
+		kulbu_hardware_robot
 		kulbu_hardware_control_loop
 		kulbu_hardware_interface
   CATKIN_DEPENDS

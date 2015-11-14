@@ -41,6 +41,7 @@ namespace kulbu_hardware {
     }
 
     // Set direction pin.
+    // TODO: Use multiple direction pins or transitor NOT gate?
     KulbuHardwareSysfs::gpio_set(pin_dirs[index], dir);
 
     // Set PWM frequency.
@@ -48,6 +49,7 @@ namespace kulbu_hardware {
   };
 
   unsigned int KulbuHardwareRobot::getJointVelocity(int index) {
+    // TODO: Wheel encoders.
 
   };
 }  // namespace kulbu_hardware
